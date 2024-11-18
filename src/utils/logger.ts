@@ -44,10 +44,7 @@ morgan.token("headers", (req) => JSON.stringify(req.headers));
 const morganFormat =
   ":method :url :status :res[content-length] - :response-time ms :headers";
 
-export const getMorganRequestLogger = (
-  folderPath: string,
-  winstonLogger: Logger
-) => {
+export const getMorganRequestLogger = (winstonLogger: Logger) => {
   return morgan(morganFormat, {
     stream: {
       write: (message) => {
