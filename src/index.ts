@@ -7,3 +7,5 @@ export * from "./utils/logger";
 export * from "./utils/errors";
 
 export * from "./middlewares";
+
+export * from "./utils/api.utils";

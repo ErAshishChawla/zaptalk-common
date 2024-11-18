@@ -1,7 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 
 import { decodeJWT } from "../utils/jwt.utils";
-import { keys } from "../utils/keys";
 
 import { JWTVerifyStatus } from "../types";
 
@@ -16,7 +15,7 @@ export const currentUser = async (
     return next();
   }
 
-  const decodeJWTRes = decodeJWT(accessToken, keys.ACCESS_TOKEN_SECRET.value!);
+  const decodeJWTRes = decodeJWT(accessToken, process.env.ACCESS_TOKEN_SECRET!);
 
   if (decodeJWTRes.status === JWTVerifyStatus.SUCCESS) {
     req.currentUser = decodeJWTRes.payload;
