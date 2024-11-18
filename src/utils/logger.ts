@@ -63,7 +63,7 @@ export const getMorganRequestLogger = (winstonLogger: Logger) => {
   });
 };
 
-export const getRequestErrorLogger = (folderPath: string) => {
+export const getRequestErrorLogger = (winstonLogger: Logger) => {
   return (err: Error, req: Request, res: Response, next: NextFunction) => {
     const commonRequestData = {
       method: req.method,
@@ -73,8 +73,6 @@ export const getRequestErrorLogger = (folderPath: string) => {
       query: req.query,
       params: req.params,
     };
-
-    const winstonLogger = getWinstonLogger(folderPath);
 
     if (err instanceof CustomError) {
       const { payload, type } = err.serializeError();
