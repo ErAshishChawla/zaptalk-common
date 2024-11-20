@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 
-import { UnauthorizedError } from "../utils/errors/unauthorized-error";
+import { AccessTokenExpiredError } from "../utils/errors/access-token-expired-error";
 
 export async function requireAuth(
   req: Request,
@@ -8,7 +8,7 @@ export async function requireAuth(
   next: NextFunction
 ) {
   if (!req?.currentUser) {
-    throw new UnauthorizedError();
+    throw new AccessTokenExpiredError();
   }
 
   next();
