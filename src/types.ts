@@ -67,10 +67,9 @@ export interface UserPayload {
   isDeactivated: boolean;
   firstName: string;
   lastName: string;
-  isProfileComplete: boolean;
+  isRegistrationCompleted: boolean;
   avatar?: string;
-  avatarUploadStatus?: FileUploadStatus;
-  profileDescription?: string;
+  profileDescription: string;
   createdAt: string;
   updatedAt: string;
 }

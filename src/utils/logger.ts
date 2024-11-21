@@ -63,6 +63,22 @@ export const getMorganRequestLogger = (winstonLogger: Logger) => {
   });
 };
 
+export const getRequestIncomingLogger = (winstonLogger: Logger) => {
+  return (req: Request, res: Response, next: NextFunction) => {
+    const commonRequestData = {
+      method: req.method,
+      url: req.url,
+      headers: req.headers,
+      body: req.body,
+      query: req.query,
+      params: req.params,
+    };
+
+    winstonLogger.info(JSON.stringify(commonRequestData));
+    next();
+  };
+};
+
 export const getRequestErrorLogger = (winstonLogger: Logger) => {
   return (err: Error, req: Request, res: Response, next: NextFunction) => {
     const commonRequestData = {
