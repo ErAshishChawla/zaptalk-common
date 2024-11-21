@@ -27,7 +27,7 @@ export const getWinstonLogger = (folderPath: string) => {
         format: consoleLogFormat,
       }),
       new DailyRotateFile({
-        filename: `${path}/%DATE%-error.log`,
+        filename: path.join(folderPath, "logs", "app-%DATE%.log"),
         datePattern: "YYYY-MM-DD",
         zippedArchive: true,
         maxSize: "20m",
@@ -44,7 +44,7 @@ morgan.token("headers", (req) => JSON.stringify(req.headers));
 const morganFormat =
   ":method :url :status :res[content-length] - :response-time ms :headers";
 
-export const getMorganRequestLogger = (winstonLogger: Logger) => {
+export const getMorganLogger = (winstonLogger: Logger) => {
   return morgan(morganFormat, {
     stream: {
       write: (message) => {
