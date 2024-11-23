@@ -15,7 +15,7 @@ export interface OutboxEvent {
   subject: EventSubject;
   status: OutboxEventStatus;
   payload: Record<string, any>;
-  locked_at: string | null;
-  created_at: string;
-  updated_at: string;
+  lockedAt: Date | null;
+  createdAt: Date;
+  updatedAt: Date;
 }
