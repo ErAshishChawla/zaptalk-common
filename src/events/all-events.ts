@@ -1,3 +1,5 @@
+import { UserPayload } from "../types";
+
 /**
  * Enum representing the status of an event.
  */
@@ -22,6 +24,7 @@ export enum EventTopic {
  */
 export enum EventQueue {
   authQueue = "authQueue",
+  notificationQueue = "notificationQueue",
 }
 
 /**
