@@ -10,7 +10,9 @@ import { ErrorTypes } from "../types";
 
 const { combine, timestamp, json, colorize } = format;
 
-// Custom format for console logging with colors
+/**
+ * Custom format for console logging with colors.
+ */
 const consoleLogFormat = format.combine(
   format.colorize(),
   format.printf(({ level, message, timestamp }) => {
@@ -18,6 +20,12 @@ const consoleLogFormat = format.combine(
   })
 );
 
+/**
+ * Creates a Winston logger instance with console and daily rotate file transports.
+ *
+ * @param folderPath - The path to the folder where log files will be stored.
+ * @returns A configured Winston logger instance.
+ */
 export const getWinstonLogger = (folderPath: string) => {
   return createLogger({
     level: "info",
@@ -37,13 +45,23 @@ export const getWinstonLogger = (folderPath: string) => {
   });
 };
 
-// Custom Morgan tokens to log detailed request information
+/**
+ * Custom Morgan tokens to log detailed request information.
+ */
 morgan.token("headers", (req) => JSON.stringify(req.headers));
 
-// Custom Morgan format string
+/**
+ * Custom Morgan format string.
+ */
 const morganFormat =
   ":method :url :status :res[content-length] - :response-time ms :headers";
 
+/**
+ * Creates a Morgan logger instance that logs request information using a Winston logger.
+ *
+ * @param winstonLogger - The Winston logger instance to use for logging.
+ * @returns A configured Morgan logger instance.
+ */
 export const getMorganLogger = (winstonLogger: Logger) => {
   return morgan(morganFormat, {
     stream: {
@@ -63,6 +81,12 @@ export const getMorganLogger = (winstonLogger: Logger) => {
   });
 };
 
+/**
+ * Middleware to log incoming requests using a Winston logger.
+ *
+ * @param winstonLogger - The Winston logger instance to use for logging.
+ * @returns An Express middleware function.
+ */
 export const getRequestIncomingLogger = (winstonLogger: Logger) => {
   return (req: Request, res: Response, next: NextFunction) => {
     const commonRequestData = {
@@ -79,6 +103,12 @@ export const getRequestIncomingLogger = (winstonLogger: Logger) => {
   };
 };
 
+/**
+ * Middleware to log request errors using a Winston logger.
+ *
+ * @param winstonLogger - The Winston logger instance to use for logging.
+ * @returns An Express error-handling middleware function.
+ */
 export const getRequestErrorLogger = (winstonLogger: Logger) => {
   return (err: Error, req: Request, res: Response, next: NextFunction) => {
     const commonRequestData = {

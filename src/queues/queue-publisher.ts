@@ -1,32 +1,32 @@
-/**
- * Abstract class representing a queue publisher.
- *
- * This class is responsible for managing the connection to a message queue and
- * publishing events to it. It uses the AMQP protocol to interact with the queue.
- *
- * @template T - The type of event that extends the BaseEvent.
- *
- * @property {Connection} connection - The connection to the message queue.
- * @property {Channel | null} channel - The channel used to communicate with the queue.
- * @property {BaseEvent["queue"]} queueName - The name of the queue to publish events to.
- *
- * @method connectToQueue - Establishes a connection to the queue and asserts its existence.
- * @method publish - Publishes an event to the queue.
- * @method close - Closes the channel to the queue.
- */
 import { Connection, Channel } from "amqplib";
 import { BaseEvent } from "../events";
 
+/**
+ * Abstract class representing a queue publisher.
+ * This class is responsible for connecting to a queue and publishing messages to it.
+ *
+ * @template T - The type of event that extends BaseEvent.
+ */
 export abstract class QueuePublisher<T extends BaseEvent> {
   protected connection: Connection;
   protected channel: Channel | null = null;
-  abstract queueName: BaseEvent["queue"];
+  abstract queueName: T["queue"];
 
+  /**
+   * Creates an instance of QueuePublisher.
+   *
+   * @param connection - The connection to the message broker.
+   */
   constructor(connection: Connection) {
     this.connection = connection;
   }
 
-  // Connect to the queue
+  /**
+   * Connects to the queue. If the channel is not already created, it creates a new channel
+   * and asserts the queue with the specified name.
+   *
+   * @returns The channel connected to the queue.
+   */
   async connectToQueue() {
     if (!this.channel) {
       const channel = await this.connection.createChannel();
@@ -41,7 +41,12 @@ export abstract class QueuePublisher<T extends BaseEvent> {
     return this.channel;
   }
 
-  // Publish the message to the queue
+  /**
+   * Publishes the message to the queue.
+   *
+   * @param event - The event to be published to the queue.
+   * @throws Will throw an error if the channel is not connected.
+   */
   async publish(event: T) {
     if (!this.channel) {
       throw new Error("Channel not connected");
@@ -56,7 +61,9 @@ export abstract class QueuePublisher<T extends BaseEvent> {
     );
   }
 
-  // Close the connection, this will close the channel, not the connection
+  /**
+   * Closes the channel. This will not close the connection.
+   */
   async close() {
     if (this.channel) {
       await this.channel.close();
