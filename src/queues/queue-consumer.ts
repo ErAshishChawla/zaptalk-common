@@ -5,7 +5,10 @@ import { BaseEvent } from "../events";
  *
  * @template T - The type of event that extends BaseEvent.
  */
-export abstract class QueueConsumer<T extends BaseEvent> {
+export abstract class QueueConsumer<
+  T extends BaseEvent<D>,
+  D extends Record<string, any>
+> {
   /**
    * The connection to the message broker.
    */
@@ -19,7 +22,7 @@ export abstract class QueueConsumer<T extends BaseEvent> {
   /**
    * The name of the queue to consume messages from.
    */
-  abstract queueName: BaseEvent["queue"];
+  abstract queueName: T["queue"];
 
   /**
    * Handles incoming messages from the queue.

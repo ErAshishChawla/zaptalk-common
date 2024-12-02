@@ -29,7 +29,7 @@ export enum EventQueue {
  *
  * @template D - The type of the payload data.
  */
-export abstract class BaseEvent<D extends Record<string, any> = {}> {
+export abstract class BaseEvent<D extends Record<string, any>> {
   /**
    * The unique identifier of the event.
    */
