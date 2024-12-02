@@ -83,7 +83,6 @@ declare global {
 }
 
 // ----- JWT Types -----
-
 export enum JWTVerifyStatus {
   SUCCESS = "SUCCESS",
   EXPIRED = "EXPIRED",
