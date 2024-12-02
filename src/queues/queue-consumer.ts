@@ -48,11 +48,15 @@ export abstract class QueueConsumer<
    */
   async connectToQueue() {
     if (!this.channel) {
+      console.log("Creating channel");
       const channel = await this.connection.createChannel();
+
       await channel.assertQueue(this.queueName, {
         durable: true,
       });
       channel.prefetch(1);
+
+      this.channel = channel;
       return this.channel;
     }
 
