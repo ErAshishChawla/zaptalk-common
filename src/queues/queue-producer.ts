@@ -7,7 +7,7 @@ import { BaseEvent } from "../events";
  *
  * @template T - The type of event that extends BaseEvent.
  */
-export abstract class QueuePublisher<T extends BaseEvent> {
+export abstract class QueueProducer<T extends BaseEvent> {
   protected connection: Connection;
   protected channel: Channel | null = null;
   abstract queueName: T["queue"];
