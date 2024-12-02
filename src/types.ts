@@ -62,13 +62,13 @@ export enum Roles {
 export interface UserPayload {
   id: string;
   email: string;
+  firstName: string | null;
+  lastName: string | null;
   role: Roles;
   isVerified: boolean;
   isDeactivated: boolean;
-  firstName: string;
-  lastName: string;
   isRegistrationCompleted: boolean;
-  avatar?: string;
+  avatar: string | null;
   profileDescription: string;
   createdAt: string;
   updatedAt: string;
