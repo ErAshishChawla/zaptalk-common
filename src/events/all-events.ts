@@ -58,7 +58,7 @@ export abstract class BaseEvent<D extends Record<string, any> = {}> {
   /**
    * The date and time when the event was locked.
    */
-  abstract lockedAt: Date;
+  abstract lockedAt: Date | null;
 
   /**
    * The date and time when the event was created.
