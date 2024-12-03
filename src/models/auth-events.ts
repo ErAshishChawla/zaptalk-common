@@ -10,7 +10,7 @@ import { UserPayload } from "../types";
 import { EventTopic, EventQueue, EventStatus, BaseEvent } from "../events";
 
 @Entity()
-export class AuthEvent extends BaseEvent<UserPayload> {
+export class AuthEventEntity extends BaseEvent<UserPayload> {
   @PrimaryGeneratedColumn()
   id: number;
 
