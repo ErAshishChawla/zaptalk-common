@@ -1,2 +1,2 @@
-export * from "./user";
-export * from "./auth-events";
+export * from "./user-entity";
+export * from "./auth-service-event-entity";

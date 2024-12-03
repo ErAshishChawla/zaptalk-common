@@ -1,51 +1,17 @@
-import { Channel, Connection } from "amqplib";
-import { BaseEvent } from "../events";
-/**
- * Abstract class representing a queue consumer.
- *
- * @template T - The type of event that extends BaseEvent.
- */
-export abstract class QueueConsumer<
-  T extends BaseEvent<D>,
-  D extends Record<string, any>
-> {
-  /**
-   * The connection to the message broker.
-   */
+import { Channel, Connection, ConsumeMessage } from "amqplib";
+import { IBaseEvent } from "../events";
+export abstract class QueueConsumer<T extends IBaseEvent> {
   protected connection: Connection;
-
-  /**
-   * The channel for communicating with the queue.
-   */
   protected channel: Channel | null = null;
 
-  /**
-   * The name of the queue to consume messages from.
-   */
   abstract queueName: T["queue"];
 
-  /**
-   * Handles incoming messages from the queue.
-   *
-   * @param message - The incoming message of type T.
-   * @returns A promise that resolves when the message is handled.
-   */
-  abstract handleIncomingMessage(message: T): Promise<void>;
+  abstract onMessage(data: T, msg: ConsumeMessage): Promise<void>;
 
-  /**
-   * Creates an instance of QueueConsumer.
-   *
-   * @param connection - The connection to the message broker.
-   */
   constructor(connection: Connection) {
     this.connection = connection;
   }
 
-  /**
-   * Connects to the queue and creates a channel if it doesn't exist.
-   *
-   * @returns A promise that resolves to the channel.
-   */
   async connectToQueue() {
     if (!this.channel) {
       const channel = await this.connection.createChannel();
@@ -62,11 +28,6 @@ export abstract class QueueConsumer<
     return this.channel;
   }
 
-  /**
-   * Starts consuming messages from the queue.
-   *
-   * @throws Will throw an error if the channel is not connected.
-   */
   async consume() {
     if (!this.channel) {
       throw new Error("Channel not connected");
@@ -84,7 +45,7 @@ export abstract class QueueConsumer<
 
           const parsedMessage = JSON.parse(message.content.toString()) as T;
 
-          await this.handleIncomingMessage(parsedMessage);
+          await this.onMessage(parsedMessage, message);
 
           this.channel.ack(message);
         }

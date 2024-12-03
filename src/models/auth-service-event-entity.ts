@@ -6,11 +6,16 @@ import {
   UpdateDateColumn,
 } from "typeorm";
 
-import { EventTopic, EventQueue, EventStatus, BaseEvent } from "../events";
-import { UserPayload } from "../types";
+import {
+  EventTopic,
+  EventQueue,
+  EventStatus,
+  IAuthServiceEvent,
+} from "../events";
+import { IUserPayload } from "../types";
 
 @Entity()
-export class AuthEventEntity extends BaseEvent<UserPayload> {
+export class AuthServiceEventEntity implements IAuthServiceEvent {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -21,7 +26,7 @@ export class AuthEventEntity extends BaseEvent<UserPayload> {
   topic: EventTopic;
 
   @Column("jsonb")
-  payload: UserPayload;
+  payload: IUserPayload;
 
   @Column("enum", {
     enum: EventStatus,

@@ -11,40 +11,40 @@ export enum ErrorTypes {
   RESET_TOKEN_EXPIRED_ERROR = "REQUEST_TOKEN_EXPIRED",
 }
 
-export interface ErrorPayload {
+export interface IErrorPayload {
   message: string;
   field?: string;
 }
 
 // ----- API RESPONSE TYPES -----
-export interface ApiError {
+export interface IApiError {
   type: ErrorTypes;
-  payload: ErrorPayload[];
+  payload: IErrorPayload[];
 }
 
-export interface ApiResponseAttrs<DataType = any> {
+export interface IApiResponseAttrs<DataType = any> {
   data?: DataType;
-  error?: ApiError;
+  error?: IApiError;
   statusCode: number;
 }
-export interface ApiResponse<DataType = any> {
+export interface IApiResponse<DataType = any> {
   success: boolean;
   data?: DataType;
   error?: {
     type: ErrorTypes;
-    payload: ErrorPayload[];
+    payload: IErrorPayload[];
   };
   statusCode: number;
 }
 
 // ----- ENV TYPES -----
-interface EnvKey {
+interface IEnvKey {
   value?: string;
   required?: boolean;
 }
 
-export interface EnvKeys {
-  [key: string]: EnvKey;
+export interface IEnvKeys {
+  [key: string]: IEnvKey;
 }
 
 // ----- File Types -----
@@ -59,7 +59,7 @@ export enum Roles {
   USER = "user",
 }
 
-export interface UserPayload {
+export interface IUserPayload {
   id: string;
   email: string;
   firstName: string | null;
@@ -77,7 +77,7 @@ export interface UserPayload {
 declare global {
   namespace Express {
     interface Request {
-      currentUser: UserPayload | null;
+      currentUser: IUserPayload | null;
     }
   }
 }
@@ -90,6 +90,6 @@ export enum JWTVerifyStatus {
 }
 
 export interface JWTVerifyResponse {
-  payload: UserPayload;
+  payload: IUserPayload;
   status: JWTVerifyStatus;
 }
