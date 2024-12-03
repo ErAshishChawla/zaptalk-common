@@ -6,8 +6,8 @@ import {
   UpdateDateColumn,
 } from "typeorm";
 
-import { UserPayload } from "../types";
 import { EventTopic, EventQueue, EventStatus, BaseEvent } from "../events";
+import { UserPayload } from "../types";
 
 @Entity()
 export class AuthEventEntity extends BaseEvent<UserPayload> {
