@@ -17,3 +17,5 @@ export * from "./utils/zod.utils";
 export * from "./events";
 
 export * from "./queues";
+
+export * from "./models";
