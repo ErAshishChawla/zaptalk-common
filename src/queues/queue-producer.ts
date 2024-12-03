@@ -38,6 +38,7 @@ export abstract class QueueProducer<
         durable: true,
       });
 
+      this.channel = channel;
       return this.channel;
     }
 
