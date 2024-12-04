@@ -24,6 +24,7 @@ export interface IBaseEvent {
   topic: EventTopic;
   payload: any;
   status: EventStatus;
+  retryCount: number;
   lockedAt: Date | null;
   createdAt: Date;
   updatedAt: Date;
