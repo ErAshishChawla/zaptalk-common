@@ -8,6 +8,8 @@ export abstract class QueueProducer<T extends IBaseEvent> {
 
   constructor(connection: Connection) {
     this.connection = connection;
+
+    Object.setPrototypeOf(this, QueueProducer.prototype);
   }
 
   async connectToQueue() {
@@ -35,13 +37,18 @@ export abstract class QueueProducer<T extends IBaseEvent> {
       Buffer.from(JSON.stringify(event)),
       {
         persistent: true,
+        headers: {
+          "x-delivery-count": 0,
+        },
       }
     );
   }
 
   async close() {
-    if (this.channel) {
-      await this.channel.close();
+    if (!this.channel) {
+      throw new Error("Channel not connected");
     }
+
+    await this.channel.close();
   }
 }

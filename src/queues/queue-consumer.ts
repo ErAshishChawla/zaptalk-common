@@ -10,6 +10,8 @@ export abstract class QueueConsumer<T extends IBaseEvent> {
 
   constructor(connection: Connection) {
     this.connection = connection;
+
+    Object.setPrototypeOf(this, QueueConsumer.prototype);
   }
 
   async connectToQueue() {
@@ -42,6 +44,16 @@ export abstract class QueueConsumer<T extends IBaseEvent> {
               this.queueName
             } - Received message: ${message.content.toString()}`
           );
+
+          // Update the delivery count
+          if (message.properties.headers) {
+            const deliveryCount = message.properties.headers[
+              "x-delivery-count"
+            ] as number;
+
+            // Update the delivery count
+            message.properties.headers["x-delivery-count"] = deliveryCount + 1;
+          }
 
           const parsedMessage = JSON.parse(message.content.toString()) as T;
 
