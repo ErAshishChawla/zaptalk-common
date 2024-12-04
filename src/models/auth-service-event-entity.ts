@@ -14,7 +14,7 @@ import {
 } from "../events";
 import { IUserPayload } from "../types";
 
-export const EVENT_RETRY_LIMIT = 3;
+export const EVENT_RETRY_LIMIT = 5;
 
 interface AuthServiceEventCreationAttributes {
   payload: IUserPayload;
@@ -54,6 +54,9 @@ export class AuthServiceEvent implements IAuthServiceEvent {
 
   @Column("int", { default: 0 })
   retryCount: number;
+
+  @Column("timestamp", { nullable: true, default: null })
+  lockExpiration: Date | null;
 
   @CreateDateColumn()
   createdAt: Date;
