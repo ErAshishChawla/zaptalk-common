@@ -1,5 +1,9 @@
 import { Channel, Connection, ConsumeMessage } from "amqplib";
 import { IBaseEvent } from "../events";
+import {
+  DEFAULT_DELIERY_COUNT,
+  DELIVERY_COUNT_HEADER,
+} from "./producer-headers";
 
 export abstract class QueueProducer<T extends IBaseEvent> {
   protected connection: Connection;
@@ -38,7 +42,7 @@ export abstract class QueueProducer<T extends IBaseEvent> {
       {
         persistent: true,
         headers: {
-          "x-delivery-count": 0,
+          DELIVERY_COUNT_HEADER: DEFAULT_DELIERY_COUNT,
         },
       }
     );
