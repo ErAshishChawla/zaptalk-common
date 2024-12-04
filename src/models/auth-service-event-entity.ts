@@ -14,8 +14,24 @@ import {
 } from "../events";
 import { IUserPayload } from "../types";
 
-@Entity()
-export class AuthServiceEventEntity implements IAuthServiceEvent {
+interface AuthServiceEventCreationAttributes {
+  payload: IUserPayload;
+  topic: EventTopic;
+}
+
+interface IAuthServiceEventJSON {
+  id: number;
+  queue: EventQueue.authQueue;
+  topic: EventTopic;
+  payload: IUserPayload;
+  status: EventStatus;
+  lockedAt: Date | null;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+@Entity("auth_service_events")
+export class AuthServiceEvent implements IAuthServiceEvent {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -42,4 +58,24 @@ export class AuthServiceEventEntity implements IAuthServiceEvent {
 
   @UpdateDateColumn()
   updatedAt: Date;
+
+  static build(attrs: AuthServiceEventCreationAttributes) {
+    const authEvent = new AuthServiceEvent();
+    authEvent.payload = attrs.payload;
+    authEvent.topic = attrs.topic;
+    return authEvent;
+  }
+
+  toJSON(): IAuthServiceEventJSON {
+    return {
+      id: this.id,
+      queue: this.queue,
+      topic: this.topic,
+      payload: this.payload,
+      status: this.status,
+      lockedAt: this.lockedAt,
+      createdAt: this.createdAt,
+      updatedAt: this.updatedAt,
+    };
+  }
 }

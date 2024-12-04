@@ -6,12 +6,21 @@ import {
   UpdateDateColumn,
   Index,
 } from "typeorm";
+import bcrypt from "bcryptjs";
+import { nanoid } from "nanoid";
+import { DateTime } from "luxon";
 
 import { Roles } from "../types";
 import { FileUploadStatus } from "../types";
+import { IUserPayload } from "../types";
 
-@Entity()
-export class UserEntity {
+interface UserCreationAttributes {
+  email: string;
+  password: string;
+}
+
+@Entity("users")
+export class User {
   @PrimaryGeneratedColumn("uuid")
   id: string;
 
@@ -69,4 +78,31 @@ export class UserEntity {
 
   @UpdateDateColumn()
   updatedAt: Date;
+
+  static build(attrs: UserCreationAttributes) {
+    const user = new User();
+    user.email = attrs.email;
+    user.password = bcrypt.hashSync(attrs.password, 10);
+    user.verificationToken = nanoid();
+    user.verificationTokenExpiry = DateTime.now().plus({ hours: 24 }).toISO();
+    return user;
+  }
+
+  async toJSON(): Promise<IUserPayload> {
+    return {
+      id: this.id,
+      email: this.email,
+      firstName: this.firstName,
+      lastName: this.lastName,
+      role: this.role,
+      isVerified: this.isVerified,
+      isDeactivated: this.isDeactivated,
+      isRegistrationCompleted: this.isRegistrationCompleted,
+      // TODO: Convert this to s3 presigned get url
+      avatar: this.avatarKey,
+      profileDescription: this.profileDescription,
+      createdAt: this.createdAt.toISOString(),
+      updatedAt: this.updatedAt.toISOString(),
+    };
+  }
 }
