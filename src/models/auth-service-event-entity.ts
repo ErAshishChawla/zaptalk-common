@@ -25,7 +25,7 @@ interface IAuthServiceEventJSON {
   topic: EventTopic;
   payload: IUserPayload;
   status: EventStatus;
-  lockedAt: Date | null;
+  retryCount: number;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -50,8 +50,8 @@ export class AuthServiceEvent implements IAuthServiceEvent {
   })
   status: EventStatus;
 
-  @Column("timestamp", { nullable: true, default: null })
-  lockedAt: Date | null;
+  @Column("int", { default: 0 })
+  retryCount: number;
 
   @CreateDateColumn()
   createdAt: Date;
@@ -73,7 +73,7 @@ export class AuthServiceEvent implements IAuthServiceEvent {
       topic: this.topic,
       payload: this.payload,
       status: this.status,
-      lockedAt: this.lockedAt,
+      retryCount: this.retryCount,
       createdAt: this.createdAt,
       updatedAt: this.updatedAt,
     };

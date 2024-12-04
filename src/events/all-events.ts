@@ -35,7 +35,7 @@ export interface IAuthServiceEvent {
   topic: EventTopic;
   payload: IUserPayload;
   status: EventStatus;
-  lockedAt: Date | null;
+  retryCount: number;
   createdAt: Date;
   updatedAt: Date;
 }
