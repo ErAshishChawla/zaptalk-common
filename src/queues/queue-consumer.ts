@@ -46,8 +46,6 @@ export abstract class QueueConsumer<T extends IBaseEvent> {
           const parsedMessage = JSON.parse(message.content.toString()) as T;
 
           await this.onMessage(parsedMessage, message);
-
-          this.channel.ack(message);
         }
       },
       {
