@@ -43,18 +43,4 @@ export interface IBaseEvent<D = any> {
   updatedAt: Date;
 }
 
-export interface IBaseEventJSON<D> {
-  id: number;
-  queue: EventQueue;
-  topic: EventTopic;
-  payload: D;
-  status: EventStatus;
-  retryCount: number;
-  lockExpiration: Date | null;
-  createdAt: Date;
-  updatedAt: Date;
-}
-
 export interface IAuthServiceEvent extends IBaseEvent<IUserPayload> {}
-
-export interface IAuthServiceEventJSON extends IBaseEventJSON<IUserPayload> {}

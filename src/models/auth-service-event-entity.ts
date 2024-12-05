@@ -11,7 +11,6 @@ import {
   EventQueue,
   EventStatus,
   IAuthServiceEvent,
-  IAuthServiceEventJSON,
 } from "../events";
 import { IUserPayload } from "../types";
 
@@ -61,7 +60,7 @@ export class AuthServiceEvent implements IAuthServiceEvent {
     return authEvent;
   }
 
-  toJSON(): IAuthServiceEventJSON {
+  toJSON(): IAuthServiceEvent {
     return {
       id: this.id,
       queue: this.queue,
