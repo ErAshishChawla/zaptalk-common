@@ -14,8 +14,6 @@ import {
 } from "../events";
 import { IUserPayload } from "../types";
 
-export const EVENT_RETRY_LIMIT = 5;
-
 interface AuthServiceEventCreationAttributes {
   payload: IUserPayload;
   topic: EventTopic;
