@@ -69,6 +69,7 @@ export class AuthServiceEvent implements IAuthServiceEvent {
       payload: this.payload,
       status: this.status,
       retryCount: this.retryCount,
+      lockExpiration: this.lockExpiration,
       createdAt: this.createdAt,
       updatedAt: this.updatedAt,
     };

@@ -50,6 +50,7 @@ export interface IBaseEventJSON<D> {
   payload: D;
   status: EventStatus;
   retryCount: number;
+  lockExpiration: Date | null;
   createdAt: Date;
   updatedAt: Date;
 }
