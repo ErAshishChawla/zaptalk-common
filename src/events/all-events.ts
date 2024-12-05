@@ -18,17 +18,17 @@ export enum EventQueue {
   notificationQueue = "notificationQueue",
 }
 
-export const jobSchedules = {
-  [EventQueue.authQueue]: "*/5 * * * * *",
-};
-
-export const jobRetryLimits = {
+export const EventRetryLimits = {
   [EventQueue.authQueue]: 5,
 };
 
 // In minutes
-export const jobLockDurationsInMins = {
+export const EventLockDurationInMin = {
   [EventQueue.authQueue]: 5,
+};
+
+export const jobSchedules = {
+  [EventQueue.authQueue]: "*/5 * * * * *",
 };
 
 export interface IBaseEvent<D = any> {
