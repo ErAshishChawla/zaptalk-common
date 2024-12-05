@@ -11,6 +11,7 @@ import {
   EventQueue,
   EventStatus,
   IAuthServiceEvent,
+  IAuthServiceEventJSON,
 } from "../events";
 import { IUserPayload } from "../types";
 
@@ -19,17 +20,6 @@ export const EVENT_RETRY_LIMIT = 5;
 interface AuthServiceEventCreationAttributes {
   payload: IUserPayload;
   topic: EventTopic;
-}
-
-interface IAuthServiceEventJSON {
-  id: number;
-  queue: EventQueue.authQueue;
-  topic: EventTopic;
-  payload: IUserPayload;
-  status: EventStatus;
-  retryCount: number;
-  createdAt: Date;
-  updatedAt: Date;
 }
 
 @Entity("auth_service_events")

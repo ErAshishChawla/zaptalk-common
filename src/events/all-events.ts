@@ -18,6 +18,19 @@ export enum EventQueue {
   notificationQueue = "notificationQueue",
 }
 
+export const jobSchedules = {
+  [EventQueue.authQueue]: "*/5 * * * * *",
+};
+
+export const jobRetryLimits = {
+  [EventQueue.authQueue]: 5,
+};
+
+// In minutes
+export const jobLockDurationsInMins = {
+  [EventQueue.authQueue]: 5,
+};
+
 export interface IBaseEvent<D = any> {
   id: number;
   queue: EventQueue;
@@ -30,4 +43,17 @@ export interface IBaseEvent<D = any> {
   updatedAt: Date;
 }
 
+export interface IBaseEventJSON<D> {
+  id: number;
+  queue: EventQueue;
+  topic: EventTopic;
+  payload: D;
+  status: EventStatus;
+  retryCount: number;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
 export interface IAuthServiceEvent extends IBaseEvent<IUserPayload> {}
+
+export interface IAuthServiceEventJSON extends IBaseEventJSON<IUserPayload> {}
