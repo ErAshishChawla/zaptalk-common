@@ -28,7 +28,7 @@ export const EventLockDurationInMin = {
 };
 
 export const jobSchedules = {
-  [EventQueue.authQueue]: "*/5 * * * * *",
+  [EventQueue.authQueue]: "*/5 * * * *",
 };
 
 export interface IKafkaEvent {
