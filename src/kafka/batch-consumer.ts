@@ -2,14 +2,14 @@ import { Consumer, EachBatchPayload, Kafka } from "kafkajs";
 
 import { EventTopic, IKafkaEvent } from "../events";
 
-export abstract class BatchConsumer<Payload extends IKafkaEvent> {
+export abstract class BatchConsumer<Event extends IKafkaEvent> {
   protected kafka: Kafka;
   protected consumer: Consumer | null = null;
 
-  abstract topic: Payload["topic"];
+  abstract topic: Event["topic"];
 
   abstract onEachBatch(
-    messages: (Payload | null)[],
+    messages: (Event | null)[],
     kafkaBatch: EachBatchPayload
   ): Promise<void>;
 
@@ -55,9 +55,7 @@ export abstract class BatchConsumer<Payload extends IKafkaEvent> {
     await this.consumer.run({
       eachBatch: async (kafkaBatch) => {
         const messages = kafkaBatch.batch.messages.map((message) =>
-          message.value
-            ? (JSON.parse(message.value.toString()) as Payload)
-            : null
+          message.value ? (JSON.parse(message.value.toString()) as Event) : null
         );
 
         await this.onEachBatch(messages, kafkaBatch);

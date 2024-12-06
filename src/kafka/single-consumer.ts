@@ -1,14 +1,14 @@
 import { Consumer, EachMessagePayload, Kafka } from "kafkajs";
 import { EventTopic, IKafkaEvent } from "../events";
 
-export abstract class KafkaConsumer<Payload extends IKafkaEvent> {
+export abstract class KafkaConsumer<Event extends IKafkaEvent> {
   protected kafka: Kafka;
   protected consumer: Consumer | null = null;
 
-  abstract topic: Payload["topic"];
+  abstract topic: Event["topic"];
 
   abstract onEachMessage(
-    message: Payload | null,
+    message: Event | null,
     kafkaMessage: EachMessagePayload
   ): Promise<void>;
 
@@ -55,7 +55,7 @@ export abstract class KafkaConsumer<Payload extends IKafkaEvent> {
       eachMessage: async (kafkaMessage) => {
         const message = kafkaMessage.message;
         const data = message?.value
-          ? (JSON.parse(message.value.toString()) as Payload)
+          ? (JSON.parse(message.value.toString()) as Event)
           : null;
         await this.onEachMessage(data, kafkaMessage);
       },
