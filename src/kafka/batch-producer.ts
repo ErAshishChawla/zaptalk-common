@@ -3,24 +3,23 @@ import { EventTopic, IKafkaEvent } from "../events";
 
 export abstract class KafkaBatchProducer<Event extends IKafkaEvent> {
   protected kafka: Kafka;
-  protected producer: Producer | null = null;
+  protected producer: Producer;
+  protected isConnected: boolean = false;
 
   constructor(kafka: Kafka) {
     this.kafka = kafka;
+    this.producer = kafka.producer();
 
     Object.setPrototypeOf(this, KafkaBatchProducer.prototype);
   }
 
-  async connect() {
-    if (!this.producer) {
-      const producer = this.kafka.producer();
-      await producer.connect();
-      this.producer = producer;
-
-      return this.producer;
+  async connectProducer() {
+    if (this.isConnected) {
+      throw new Error("Producer already connected");
     }
 
-    return this.producer;
+    await this.producer.connect();
+    this.isConnected = true;
   }
 
   async sendMessage(topic: EventTopic, message: Event["payload"][]) {
@@ -38,11 +37,12 @@ export abstract class KafkaBatchProducer<Event extends IKafkaEvent> {
     });
   }
 
-  async disconnect() {
-    if (!this.producer) {
+  async disconnectProducer() {
+    if (!this.isConnected) {
       throw new Error("Producer not connected");
     }
 
     await this.producer.disconnect();
+    this.isConnected = false;
   }
 }
