@@ -1,7 +1,7 @@
 import { Kafka, Producer } from "kafkajs";
-import { EventTopic } from "../events";
+import { EventTopic, IKafkaEvent } from "../events";
 
-export abstract class KafkaProducer<T extends Record<string, any>> {
+export abstract class KafkaProducer<Event extends IKafkaEvent> {
   protected kafka: Kafka;
   protected producer: Producer | null = null;
 
@@ -23,7 +23,7 @@ export abstract class KafkaProducer<T extends Record<string, any>> {
     return this.producer;
   }
 
-  async sendMessage(topic: EventTopic, message: T) {
+  async sendMessage(topic: EventTopic, message: Event["payload"]) {
     if (!this.producer) {
       throw new Error("Producer not connected");
     }
