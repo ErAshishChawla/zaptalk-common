@@ -1,12 +1,12 @@
 import { Channel, Connection, ConsumeMessage } from "amqplib";
 import { IBaseEvent } from "../events";
-export abstract class QueueConsumer<T extends IBaseEvent> {
+export abstract class QueueConsumer<Event extends IBaseEvent> {
   protected connection: Connection;
   protected channel: Channel | null = null;
 
-  abstract queueName: T["queue"];
+  abstract queueName: Event["queue"];
 
-  abstract onMessage(data: T, msg: ConsumeMessage): Promise<void>;
+  abstract onMessage(data: Event, msg: ConsumeMessage): Promise<void>;
 
   constructor(connection: Connection) {
     this.connection = connection;
@@ -45,7 +45,7 @@ export abstract class QueueConsumer<T extends IBaseEvent> {
             } - Received message: ${message.content.toString()}`
           );
 
-          const parsedMessage = JSON.parse(message.content.toString()) as T;
+          const parsedMessage = JSON.parse(message.content.toString()) as Event;
 
           await this.onMessage(parsedMessage, message);
         }

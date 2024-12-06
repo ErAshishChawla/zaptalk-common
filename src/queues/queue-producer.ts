@@ -5,10 +5,10 @@ import {
   DELIVERY_COUNT_HEADER,
 } from "./producer-headers";
 
-export abstract class QueueProducer<T extends IBaseEvent> {
+export abstract class QueueProducer<Event extends IBaseEvent> {
   protected connection: Connection;
   protected channel: Channel | null = null;
-  abstract queueName: T["queue"];
+  abstract queueName: Event["queue"];
 
   constructor(connection: Connection) {
     this.connection = connection;
@@ -31,7 +31,7 @@ export abstract class QueueProducer<T extends IBaseEvent> {
     return this.channel;
   }
 
-  async publish(event: T) {
+  async publish(event: Event) {
     if (!this.channel) {
       throw new Error("Channel not connected");
     }

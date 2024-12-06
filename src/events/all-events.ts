@@ -31,6 +31,11 @@ export const jobSchedules = {
   [EventQueue.authQueue]: "*/5 * * * * *",
 };
 
+export interface IKafkaEvent {
+  topic: EventTopic;
+  payload: any;
+}
+
 export interface IBaseEvent<D = any> {
   id: number;
   queue: EventQueue;
