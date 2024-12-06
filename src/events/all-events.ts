@@ -8,9 +8,9 @@ export enum EventStatus {
 }
 
 export enum EventTopic {
-  userCreated = "user:created",
-  userVerified = "user:verified",
-  userResendVerification = "user:resend-verification",
+  userCreated = "user.created",
+  userVerified = "user.verified",
+  userResendVerification = "user.resend-verification",
 }
 
 export enum EventQueue {
