@@ -1,7 +1,7 @@
 import { Consumer, EachMessagePayload, Kafka } from "kafkajs";
 import { EventTopic, IKafkaEvent } from "../events";
 
-export abstract class KafkaConsumer<Event extends IKafkaEvent> {
+export abstract class KafkaSingleConsumer<Event extends IKafkaEvent> {
   protected kafka: Kafka;
   protected consumer: Consumer | null = null;
 
@@ -15,7 +15,7 @@ export abstract class KafkaConsumer<Event extends IKafkaEvent> {
   constructor(kafka: Kafka) {
     this.kafka = kafka;
 
-    Object.setPrototypeOf(this, KafkaConsumer.prototype);
+    Object.setPrototypeOf(this, KafkaSingleConsumer.prototype);
   }
 
   async connect(groupId: string) {
@@ -58,6 +58,14 @@ export abstract class KafkaConsumer<Event extends IKafkaEvent> {
           ? (JSON.parse(message.value.toString()) as Event)
           : null;
         await this.onEachMessage(data, kafkaMessage);
+
+        await this.consumer!.commitOffsets([
+          {
+            topic: kafkaMessage.topic,
+            partition: kafkaMessage.partition,
+            offset: (parseInt(kafkaMessage.message.offset, 10) + 1).toString(),
+          },
+        ]);
       },
     });
   }

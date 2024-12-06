@@ -1,14 +1,14 @@
 import { Kafka, Producer } from "kafkajs";
 import { EventTopic, IKafkaEvent } from "../events";
 
-export abstract class KafkaProducer<Event extends IKafkaEvent> {
+export abstract class KafkaSingleProducer<Event extends IKafkaEvent> {
   protected kafka: Kafka;
   protected producer: Producer | null = null;
 
   constructor(kafka: Kafka) {
     this.kafka = kafka;
 
-    Object.setPrototypeOf(this, KafkaProducer.prototype);
+    Object.setPrototypeOf(this, KafkaSingleProducer.prototype);
   }
 
   async connect() {

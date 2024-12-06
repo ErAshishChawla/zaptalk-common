@@ -2,7 +2,7 @@ import { Consumer, EachBatchPayload, Kafka } from "kafkajs";
 
 import { EventTopic, IKafkaEvent } from "../events";
 
-export abstract class BatchConsumer<Event extends IKafkaEvent> {
+export abstract class KafkaBatchConsumer<Event extends IKafkaEvent> {
   protected kafka: Kafka;
   protected consumer: Consumer | null = null;
 
@@ -16,7 +16,7 @@ export abstract class BatchConsumer<Event extends IKafkaEvent> {
   constructor(kafka: Kafka) {
     this.kafka = kafka;
 
-    Object.setPrototypeOf(this, BatchConsumer.prototype);
+    Object.setPrototypeOf(this, KafkaBatchConsumer.prototype);
   }
 
   async connect(groupId: string) {
@@ -59,6 +59,16 @@ export abstract class BatchConsumer<Event extends IKafkaEvent> {
         );
 
         await this.onEachBatch(messages, kafkaBatch);
+
+        await this.consumer!.commitOffsets([
+          {
+            topic: kafkaBatch.batch.topic,
+            partition: kafkaBatch.batch.partition,
+            offset: (
+              parseInt(kafkaBatch.batch.lastOffset(), 10) + 1
+            ).toString(),
+          },
+        ]);
       },
     });
   }
