@@ -4,7 +4,6 @@ import { EventTopic, IKafkaEvent } from "../events";
 export abstract class KafkaSingleProducer<Event extends IKafkaEvent> {
   protected kafka: Kafka;
   protected producer: Producer;
-  protected isConnected: boolean = false;
 
   constructor(kafka: Kafka) {
     this.kafka = kafka;
@@ -14,19 +13,10 @@ export abstract class KafkaSingleProducer<Event extends IKafkaEvent> {
   }
 
   async connectProducer() {
-    if (this.isConnected) {
-      throw new Error("Producer already connected");
-    }
-
     await this.producer.connect();
-    this.isConnected = true;
   }
 
   async sendMessage(topic: EventTopic, message: Event["payload"]) {
-    if (!this.producer) {
-      throw new Error("Producer not connected");
-    }
-
     await this.producer.send({
       topic,
       messages: [
@@ -38,11 +28,6 @@ export abstract class KafkaSingleProducer<Event extends IKafkaEvent> {
   }
 
   async disconnectProducer() {
-    if (!this.isConnected) {
-      throw new Error("Producer not connected");
-    }
-
     await this.producer.disconnect();
-    this.isConnected = false;
   }
 }
