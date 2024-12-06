@@ -21,3 +21,5 @@ export * from "./queues";
 export * from "./models";
 
 export * from "./utils/rabbitmq.utils";
+
+export * from "./kafka";
