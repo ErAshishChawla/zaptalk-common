@@ -23,6 +23,7 @@ export const EventQueueConfig: {
     retryLimit: number;
     timeout: DurationLikeObject;
     buffer: DurationLikeObject;
+    lockExpiration: DurationLikeObject;
     jobSchedule: string;
   };
 } = {
@@ -34,16 +35,10 @@ export const EventQueueConfig: {
     buffer: {
       seconds: 30,
     },
+    lockExpiration: {
+      minutes: 1,
+    },
     jobSchedule: "*/5 * * * * *",
-  },
-};
-
-// In minutes
-export const EventLockDuration: {
-  [key in EventQueue]: DurationLikeObject;
-} = {
-  [EventQueue.authQueue]: {
-    minutes: 1,
   },
 };
 
