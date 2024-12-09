@@ -1,4 +1,4 @@
-import { DurationLike } from "luxon";
+import { DurationLikeObject } from "luxon";
 import { IUserPayload } from "../types";
 
 export enum EventStatus {
@@ -18,18 +18,35 @@ export enum EventQueue {
   authQueue = "authQueue",
 }
 
-export const EventRetryLimits = {
-  [EventQueue.authQueue]: 5,
+export const EventQueueConfig: {
+  [key in EventQueue]: {
+    retryLimit: number;
+    timeout: DurationLikeObject;
+    buffer: DurationLikeObject;
+    jobSchedule: string;
+  };
+} = {
+  [EventQueue.authQueue]: {
+    retryLimit: 5,
+    timeout: {
+      seconds: 30,
+    },
+    buffer: {
+      seconds: 30,
+    },
+    jobSchedule: "*/5 * * * * *",
+  },
 };
 
 // In minutes
 export const EventLockDuration: {
-  [key in EventQueue]: DurationLike;
+  [key in EventQueue]: DurationLikeObject;
 } = {
   [EventQueue.authQueue]: {
     minutes: 1,
   },
 };
+
 export interface IKafkaEvent {
   topic: EventTopic;
   payload: any;
