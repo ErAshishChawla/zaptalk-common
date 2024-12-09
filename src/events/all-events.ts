@@ -18,15 +18,19 @@ export enum EventQueue {
   authQueue = "authQueue",
 }
 
-export const EventQueueConfig: {
-  [key in EventQueue]: {
-    retryLimit: number;
-    timeout: DurationLikeObject;
-    buffer: DurationLikeObject;
-    lockExpiration: DurationLikeObject;
-    jobSchedule: string;
-  };
-} = {
+export interface IEventQueueConfigItem {
+  retryLimit: number;
+  timeout: DurationLikeObject;
+  buffer: DurationLikeObject;
+  lockExpiration: DurationLikeObject;
+  jobSchedule: string;
+}
+
+export type IEventQueueConfig = {
+  [key in EventQueue]: IEventQueueConfigItem;
+};
+
+export const EventQueueConfig: IEventQueueConfig = {
   [EventQueue.authQueue]: {
     retryLimit: 5,
     timeout: {
