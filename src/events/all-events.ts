@@ -19,7 +19,7 @@ export enum EventQueue {
 }
 
 export interface IEventQueueConfigItem {
-  retryLimit: number;
+  eventRetryLimit: number;
   eventTimeoutMs: number;
   batchSize: number;
   cronJobBufferMs: number;
@@ -33,7 +33,7 @@ export type IEventQueueConfig = {
 // Events are processed in batches and parallely.
 export const EventQueueConfig: IEventQueueConfig = {
   [EventQueue.authQueue]: {
-    retryLimit: 5,
+    eventRetryLimit: 5,
     // Processing timeout per event
     eventTimeoutMs: 5 * 1000,
     batchSize: 20,
