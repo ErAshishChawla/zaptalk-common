@@ -38,7 +38,7 @@ export const EventQueueConfig: IEventQueueConfig = {
     lockExpiration: {
       minutes: 1,
     },
-    jobSchedule: "*/5 * * * * *",
+    jobSchedule: "*/60 * * * * *",
   },
 };
 
