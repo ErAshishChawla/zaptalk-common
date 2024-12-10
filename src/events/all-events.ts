@@ -21,6 +21,7 @@ export enum EventQueue {
 export interface IEventQueueConfigItem {
   retryLimit: number;
   timeoutMs: number;
+  batchSize: number;
   bufferMs: number;
   lockExpiration: DurationLikeObject;
   jobSchedule: string;
@@ -30,15 +31,19 @@ export type IEventQueueConfig = {
   [key in EventQueue]: IEventQueueConfigItem;
 };
 
+// Events are processed in batches and parallely.
 export const EventQueueConfig: IEventQueueConfig = {
   [EventQueue.authQueue]: {
     retryLimit: 5,
-    timeoutMs: 30 * 1000,
+    // Processing timeout per event
+    timeoutMs: 5 * 1000,
+    batchSize: 20,
+    // Buffer time to wait run the next cron job
     bufferMs: 30 * 1000,
     lockExpiration: {
       minutes: 1,
     },
-    jobSchedule: "*/60 * * * * *",
+    jobSchedule: "*/35 * * * * *",
   },
 };
 
