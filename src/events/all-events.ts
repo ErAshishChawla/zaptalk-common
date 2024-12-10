@@ -24,7 +24,6 @@ export interface IEventQueueConfigItem {
   batchSize: number;
   bufferMs: number;
   lockExpiration: DurationLikeObject;
-  jobSchedule: string;
 }
 
 export type IEventQueueConfig = {
@@ -43,7 +42,6 @@ export const EventQueueConfig: IEventQueueConfig = {
     lockExpiration: {
       minutes: 1,
     },
-    jobSchedule: "*/35 * * * * *",
   },
 };
 
