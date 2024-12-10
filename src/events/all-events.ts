@@ -20,8 +20,8 @@ export enum EventQueue {
 
 export interface IEventQueueConfigItem {
   retryLimit: number;
-  timeout: DurationLikeObject;
-  buffer: DurationLikeObject;
+  timeoutMs: number;
+  bufferMs: number;
   lockExpiration: DurationLikeObject;
   jobSchedule: string;
 }
@@ -33,12 +33,8 @@ export type IEventQueueConfig = {
 export const EventQueueConfig: IEventQueueConfig = {
   [EventQueue.authQueue]: {
     retryLimit: 5,
-    timeout: {
-      seconds: 30,
-    },
-    buffer: {
-      seconds: 30,
-    },
+    timeoutMs: 30 * 1000,
+    bufferMs: 30 * 1000,
     lockExpiration: {
       minutes: 1,
     },
