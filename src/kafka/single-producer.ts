@@ -1,5 +1,5 @@
 import { Kafka, Producer } from "kafkajs";
-import { EventTopic, IKafkaEvent } from "../service-events";
+import { KafkaTopic, IKafkaEvent } from "../service-events";
 
 // A Producer can send messages to multiple topics
 // A consumer can only consume messages from a single topic
@@ -19,7 +19,7 @@ export abstract class KafkaSingleProducer<Event extends IKafkaEvent> {
     await this.producer.connect();
   }
 
-  async sendMessage(topic: EventTopic, message: Event["payload"]) {
+  async sendMessage(topic: KafkaTopic, message: Event["message"]) {
     await this.producer.send({
       topic,
       messages: [

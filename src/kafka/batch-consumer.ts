@@ -1,6 +1,6 @@
 import { Consumer, EachBatchPayload, Kafka } from "kafkajs";
 
-import { EventTopic, IKafkaEvent } from "../service-events";
+import { IKafkaEvent } from "../service-events";
 
 export abstract class KafkaBatchConsumer<Event extends IKafkaEvent> {
   protected kafka: Kafka;
@@ -9,7 +9,7 @@ export abstract class KafkaBatchConsumer<Event extends IKafkaEvent> {
   abstract topic: Event["topic"];
 
   abstract onEachBatch(
-    messages: (Event | null)[],
+    messages: (Event["message"] | null)[],
     kafkaBatch: EachBatchPayload
   ): Promise<void>;
 
@@ -34,7 +34,9 @@ export abstract class KafkaBatchConsumer<Event extends IKafkaEvent> {
     await this.consumer.run({
       eachBatch: async (kafkaBatch) => {
         const messages = kafkaBatch.batch.messages.map((message) =>
-          message.value ? (JSON.parse(message.value.toString()) as Event) : null
+          message.value
+            ? (JSON.parse(message.value.toString()) as Event["message"])
+            : null
         );
 
         await this.onEachBatch(messages, kafkaBatch);

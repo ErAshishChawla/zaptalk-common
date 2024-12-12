@@ -1,12 +1,12 @@
 import { Kafka } from "kafkajs";
-import { EventTopic } from "../service-events";
+import { KafkaTopic } from "../service-events";
 
 export class KafkaAdminSetup {
   constructor(private kafka: Kafka) {
     this.kafka = kafka;
   }
 
-  async createTopics(topics: EventTopic[]) {
+  async createTopics(topics: KafkaTopic[]) {
     const admin = this.kafka.admin();
     await admin.connect();
 
