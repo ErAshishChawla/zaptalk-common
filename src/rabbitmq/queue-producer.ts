@@ -1,7 +1,7 @@
 import { Channel, Connection, ConsumeMessage } from "amqplib";
-import { IBaseEvent } from "../service-events";
+import { IOutboxEvent } from "../service-events";
 
-export abstract class RabbitMQProducer<Event extends IBaseEvent> {
+export abstract class RabbitMQProducer<Event extends IOutboxEvent> {
   protected connection: Connection;
   protected channel: Channel | null = null;
   abstract queueName: Event["queue"];
