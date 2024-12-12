@@ -1,32 +1,32 @@
 import ampq, { Connection } from "amqplib";
 
-export class RabbitMQ {
+export class RabbitMQConnection {
   static instance: Connection | null = null;
 
   private constructor() {}
 
   static getInstance() {
-    if (!RabbitMQ.instance) {
+    if (!RabbitMQConnection.instance) {
       throw new Error("RabbitMQ connection not initialized");
     }
 
-    return RabbitMQ.instance;
+    return RabbitMQConnection.instance;
   }
 
   static async connect(url: string) {
-    if (!RabbitMQ.instance) {
+    if (!RabbitMQConnection.instance) {
       const connection = await ampq.connect(url);
-      RabbitMQ.instance = connection;
-      return RabbitMQ.instance;
+      RabbitMQConnection.instance = connection;
+      return RabbitMQConnection.instance;
     }
 
     throw new Error("RabbitMQ connection already initialized");
   }
 
   static async disconnect() {
-    if (RabbitMQ.instance) {
-      await RabbitMQ.instance.close();
-      RabbitMQ.instance = null;
+    if (RabbitMQConnection.instance) {
+      await RabbitMQConnection.instance.close();
+      RabbitMQConnection.instance = null;
     }
 
     throw new Error("No RabbitMQ connection to close");

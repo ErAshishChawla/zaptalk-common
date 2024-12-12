@@ -1,6 +1,7 @@
 import { Channel, Connection, ConsumeMessage } from "amqplib";
-import { IBaseEvent } from "../events";
-export abstract class QueueConsumer<Event extends IBaseEvent> {
+import { IBaseEvent } from "../service-events";
+
+export abstract class RabbitMQConsumer<Event extends IBaseEvent> {
   protected connection: Connection;
   protected channel: Channel | null = null;
 
@@ -11,7 +12,7 @@ export abstract class QueueConsumer<Event extends IBaseEvent> {
   constructor(connection: Connection) {
     this.connection = connection;
 
-    Object.setPrototypeOf(this, QueueConsumer.prototype);
+    Object.setPrototypeOf(this, RabbitMQConsumer.prototype);
   }
 
   async connectToQueue() {

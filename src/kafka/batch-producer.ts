@@ -1,10 +1,12 @@
 import { Kafka, Producer } from "kafkajs";
-import { EventTopic, IKafkaEvent } from "../events";
+import { EventTopic, IKafkaEvent } from "../service-events";
+
+// A Producer can send messages to multiple topics
+// A consumer can only consume messages from a single topic
 
 export abstract class KafkaBatchProducer<Event extends IKafkaEvent> {
   protected kafka: Kafka;
   protected producer: Producer;
-  protected isConnected: boolean = false;
 
   constructor(kafka: Kafka) {
     this.kafka = kafka;
@@ -13,13 +15,8 @@ export abstract class KafkaBatchProducer<Event extends IKafkaEvent> {
     Object.setPrototypeOf(this, KafkaBatchProducer.prototype);
   }
 
-  async connectProducer() {
-    if (this.isConnected) {
-      throw new Error("Producer already connected");
-    }
-
+  async connect() {
     await this.producer.connect();
-    this.isConnected = true;
   }
 
   async sendMessage(topic: EventTopic, message: Event["payload"][]) {
@@ -37,12 +34,7 @@ export abstract class KafkaBatchProducer<Event extends IKafkaEvent> {
     });
   }
 
-  async disconnectProducer() {
-    if (!this.isConnected) {
-      throw new Error("Producer not connected");
-    }
-
+  async disconnect() {
     await this.producer.disconnect();
-    this.isConnected = false;
   }
 }

@@ -1,10 +1,10 @@
 import { Consumer, EachBatchPayload, Kafka } from "kafkajs";
 
-import { EventTopic, IKafkaEvent } from "../events";
+import { EventTopic, IKafkaEvent } from "../service-events";
 
 export abstract class KafkaBatchConsumer<Event extends IKafkaEvent> {
   protected kafka: Kafka;
-  protected consumer: Consumer | null = null;
+  protected consumer: Consumer;
 
   abstract topic: Event["topic"];
 
@@ -13,44 +13,23 @@ export abstract class KafkaBatchConsumer<Event extends IKafkaEvent> {
     kafkaBatch: EachBatchPayload
   ): Promise<void>;
 
-  constructor(kafka: Kafka) {
+  constructor(kafka: Kafka, groupId: string) {
     this.kafka = kafka;
+    this.consumer = kafka.consumer({ groupId });
 
     Object.setPrototypeOf(this, KafkaBatchConsumer.prototype);
   }
 
-  async connect(groupId: string) {
-    if (!this.consumer) {
-      const consumer = this.kafka.consumer({ groupId });
-      await consumer.connect();
-      this.consumer = consumer;
-
-      return this.consumer;
-    }
-
-    return this.consumer;
-  }
-
-  async subscribe(topic: EventTopic) {
-    if (!this.consumer) {
-      throw new Error("Consumer not connected");
-    }
-
-    await this.consumer.subscribe({ topic, fromBeginning: true });
+  async connect() {
+    await this.consumer.connect();
   }
 
   async disconnect() {
-    if (!this.consumer) {
-      throw new Error("Consumer not connected");
-    }
-
     await this.consumer.disconnect();
   }
 
-  async run() {
-    if (!this.consumer) {
-      throw new Error("Consumer not connected");
-    }
+  async consumeBatch() {
+    await this.consumer.subscribe({ topic: this.topic, fromBeginning: true });
 
     await this.consumer.run({
       eachBatch: async (kafkaBatch) => {

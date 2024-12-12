@@ -1,5 +1,5 @@
 import { Kafka } from "kafkajs";
-import { EventTopic } from "../events";
+import { EventTopic } from "../service-events";
 
 export class KafkaAdminSetup {
   constructor(private kafka: Kafka) {

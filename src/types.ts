@@ -93,3 +93,9 @@ export interface JWTVerifyResponse {
   payload: IUserPayload;
   status: JWTVerifyStatus;
 }
+
+// ----- Notification Types -----
+export enum NotificationType {
+  EMAIL = "EMAIL",
+  PUSH = "PUSH",
+}

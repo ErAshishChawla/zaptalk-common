@@ -1,11 +1,7 @@
 import { Channel, Connection, ConsumeMessage } from "amqplib";
-import { IBaseEvent } from "../events";
-import {
-  DEFAULT_DELIERY_COUNT,
-  DELIVERY_COUNT_HEADER,
-} from "./producer-headers";
+import { IBaseEvent } from "../service-events";
 
-export abstract class QueueProducer<Event extends IBaseEvent> {
+export abstract class RabbitMQProducer<Event extends IBaseEvent> {
   protected connection: Connection;
   protected channel: Channel | null = null;
   abstract queueName: Event["queue"];
@@ -13,7 +9,7 @@ export abstract class QueueProducer<Event extends IBaseEvent> {
   constructor(connection: Connection) {
     this.connection = connection;
 
-    Object.setPrototypeOf(this, QueueProducer.prototype);
+    Object.setPrototypeOf(this, RabbitMQProducer.prototype);
   }
 
   async connectToQueue() {
@@ -41,9 +37,6 @@ export abstract class QueueProducer<Event extends IBaseEvent> {
       Buffer.from(JSON.stringify(event)),
       {
         persistent: true,
-        headers: {
-          DELIVERY_COUNT_HEADER: DEFAULT_DELIERY_COUNT,
-        },
       }
     );
   }
