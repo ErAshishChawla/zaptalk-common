@@ -22,7 +22,7 @@ interface AuthEventOutboxCreationAttributes {
 }
 
 @Entity("auth_event_outbox")
-export class AuthOutboxEvents implements IAuthEventOutbox {
+export class AuthEventOutbox implements IAuthEventOutbox {
   @PrimaryGeneratedColumn("increment")
   id: number;
 
@@ -60,7 +60,7 @@ export class AuthOutboxEvents implements IAuthEventOutbox {
   updatedAt: Date;
 
   static build(attrs: AuthEventOutboxCreationAttributes) {
-    const authEvent = new AuthOutboxEvents();
+    const authEvent = new AuthEventOutbox();
     authEvent.payload = attrs.payload;
     authEvent.topic = attrs.topic;
     authEvent.uniqueKey = nanoid();
