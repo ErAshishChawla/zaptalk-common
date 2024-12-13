@@ -28,9 +28,9 @@ export class AuthOutboxEvents implements IAuthEventOutbox {
 
   @Column("enum", {
     enum: RMQQueue,
-    default: RMQQueue.authQueue,
+    default: RMQQueue.authEventOutbox,
   })
-  queue: RMQQueue.authQueue;
+  queue: RMQQueue.authEventOutbox;
 
   @Column("enum", { enum: KafkaTopic })
   topic: KafkaTopic;

@@ -8,10 +8,6 @@ export enum EventStatus {
   FAILED = "FAILED",
 }
 
-export enum EventService {
-  auth = "auth",
-}
-
 export enum RMQQueue {
   authEventOutbox = "authEventOutbox",
 }
@@ -24,7 +20,6 @@ export enum KafkaTopic {
 
 export interface IEvent<D = any> {
   queue: RMQQueue;
-  service: EventService;
   topic: KafkaTopic;
   payload: D;
   uniqueKey: string;
