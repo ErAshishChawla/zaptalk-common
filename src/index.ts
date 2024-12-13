@@ -21,3 +21,5 @@ export * from "./rabbitmq";
 export * from "./kafka";
 
 export * from "./utils/cron.utils";
+
+export * from "./models";
