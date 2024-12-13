@@ -1,9 +1,9 @@
 import { Consumer, EachMessagePayload, Kafka } from "kafkajs";
-import { IKafkaEvent } from "../service-events";
+import { IEvent } from "../../events";
 
-export abstract class KafkaSingleConsumer<Event extends IKafkaEvent> {
-  protected kafka: Kafka;
-  protected consumer: Consumer;
+export abstract class KafkaSingleConsumer<Event extends IEvent> {
+  private kafka: Kafka;
+  private consumer: Consumer;
 
   abstract topic: Event["topic"];
 

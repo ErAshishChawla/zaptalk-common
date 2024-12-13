@@ -1,7 +1,7 @@
 import { Channel, Connection, ConsumeMessage } from "amqplib";
-import { IOutboxEvent } from "../service-events";
+import { IEvent } from "../events";
 
-export abstract class RabbitMQConsumer<Event extends IOutboxEvent> {
+export abstract class RMQQueueConsumer<Event extends IEvent> {
   protected connection: Connection;
   protected channel: Channel | null = null;
 
@@ -12,7 +12,7 @@ export abstract class RabbitMQConsumer<Event extends IOutboxEvent> {
   constructor(connection: Connection) {
     this.connection = connection;
 
-    Object.setPrototypeOf(this, RabbitMQConsumer.prototype);
+    Object.setPrototypeOf(this, RMQQueueConsumer.prototype);
   }
 
   async connectToQueue() {

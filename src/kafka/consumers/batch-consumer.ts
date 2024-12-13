@@ -1,10 +1,9 @@
 import { Consumer, EachBatchPayload, Kafka } from "kafkajs";
+import { IEvent } from "../../events";
 
-import { IKafkaEvent } from "../service-events";
-
-export abstract class KafkaBatchConsumer<Event extends IKafkaEvent> {
-  protected kafka: Kafka;
-  protected consumer: Consumer;
+export abstract class KafkaBatchConsumer<Event extends IEvent> {
+  private kafka: Kafka;
+  private consumer: Consumer;
 
   abstract topic: Event["topic"];
 
@@ -41,7 +40,7 @@ export abstract class KafkaBatchConsumer<Event extends IKafkaEvent> {
 
         await this.onEachBatch(messages, kafkaBatch);
 
-        await this.consumer!.commitOffsets([
+        await this.consumer.commitOffsets([
           {
             topic: kafkaBatch.batch.topic,
             partition: kafkaBatch.batch.partition,

@@ -1,24 +1,19 @@
-export enum OutboxEventStatus {
+import { IUserPayload } from "../types";
+
+//
+export enum EventStatus {
   PENDING = "PENDING",
   PROCESSING = "PROCESSING",
   COMPLETED = "COMPLETED",
   FAILED = "FAILED",
 }
 
-export enum OutboxEventQueue {
-  authQueue = "authQueue",
+export enum EventService {
+  auth = "auth",
 }
 
-export interface IOutboxEvent<D = any> {
-  id: number;
-  queue: OutboxEventQueue;
-  topic: KafkaTopic;
-  payload: D;
-  status: OutboxEventStatus;
-  retryCount: number;
-  lockExpiration: Date | null;
-  createdAt: Date;
-  updatedAt: Date;
+export enum RMQQueue {
+  authEventOutbox = "authEventOutbox",
 }
 
 export enum KafkaTopic {
@@ -27,10 +22,25 @@ export enum KafkaTopic {
   userResendVerification = "user.resend-verification",
 }
 
-export interface IKafkaEvent<D = any> {
+export interface IEvent<D = any> {
+  queue: RMQQueue;
+  service: EventService;
   topic: KafkaTopic;
   payload: D;
+  uniqueKey: string;
 }
+
+export interface IEventOutbox<D = any> extends IEvent<D> {
+  id: number;
+  status: EventStatus;
+  retryCount: number;
+  expiresAt: Date | null;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface IAuthEvent extends IEvent<IUserPayload> {}
+export interface IAuthEventOutbox extends IEventOutbox<IUserPayload> {}
 
 // export interface IEventQueueConfigItem {
 //   eventRetryLimit: number;
