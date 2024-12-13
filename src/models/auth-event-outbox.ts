@@ -2,6 +2,7 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  Index,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
@@ -39,6 +40,7 @@ export class AuthEventOutbox implements IAuthEventOutbox {
   payload: IUserPayload;
 
   @Column("text", { unique: true })
+  @Index()
   uniqueKey: string;
 
   @Column("enum", {
