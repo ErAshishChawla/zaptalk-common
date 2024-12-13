@@ -29,7 +29,7 @@ export enum KafkaTopic {
 
 export interface IKafkaEvent<D = any> {
   topic: KafkaTopic;
-  message: D;
+  payload: D;
 }
 
 // export interface IEventQueueConfigItem {

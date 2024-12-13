@@ -19,7 +19,7 @@ export abstract class KafkaSingleProducer<Event extends IKafkaEvent> {
     await this.producer.connect();
   }
 
-  async sendMessage(topic: KafkaTopic, message: Event["message"]) {
+  async sendMessage(topic: KafkaTopic, message: Event["payload"]) {
     await this.producer.send({
       topic,
       messages: [

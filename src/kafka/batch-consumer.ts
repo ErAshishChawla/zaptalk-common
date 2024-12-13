@@ -9,7 +9,7 @@ export abstract class KafkaBatchConsumer<Event extends IKafkaEvent> {
   abstract topic: Event["topic"];
 
   abstract onEachBatch(
-    messages: (Event["message"] | null)[],
+    messages: (Event["payload"] | null)[],
     kafkaBatch: EachBatchPayload
   ): Promise<void>;
 
@@ -35,7 +35,7 @@ export abstract class KafkaBatchConsumer<Event extends IKafkaEvent> {
       eachBatch: async (kafkaBatch) => {
         const messages = kafkaBatch.batch.messages.map((message) =>
           message.value
-            ? (JSON.parse(message.value.toString()) as Event["message"])
+            ? (JSON.parse(message.value.toString()) as Event["payload"])
             : null
         );
 

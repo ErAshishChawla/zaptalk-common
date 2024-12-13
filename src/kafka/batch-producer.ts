@@ -19,7 +19,7 @@ export abstract class KafkaBatchProducer<Event extends IKafkaEvent> {
     await this.producer.connect();
   }
 
-  async sendMessage(topic: KafkaTopic, message: Event["message"][]) {
+  async sendMessage(topic: KafkaTopic, message: Event["payload"][]) {
     if (!this.producer) {
       throw new Error("Producer not connected");
     }

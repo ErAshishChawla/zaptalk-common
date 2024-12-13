@@ -8,7 +8,7 @@ export abstract class KafkaSingleConsumer<Event extends IKafkaEvent> {
   abstract topic: Event["topic"];
 
   abstract onEachMessage(
-    message: Event["message"] | null,
+    message: Event["payload"] | null,
     kafkaMessage: EachMessagePayload
   ): Promise<void>;
 
@@ -34,7 +34,7 @@ export abstract class KafkaSingleConsumer<Event extends IKafkaEvent> {
       eachMessage: async (kafkaMessage) => {
         const message = kafkaMessage.message;
         const data = message?.value
-          ? (JSON.parse(message.value.toString()) as Event["message"])
+          ? (JSON.parse(message.value.toString()) as Event["payload"])
           : null;
         await this.onEachMessage(data, kafkaMessage);
 
