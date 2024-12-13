@@ -15,7 +15,7 @@ export abstract class RMQQueueConsumer<Event extends IEvent> {
     Object.setPrototypeOf(this, RMQQueueConsumer.prototype);
   }
 
-  async connectToQueue() {
+  async connect() {
     if (!this.channel) {
       const channel = await this.connection.createChannel();
 
